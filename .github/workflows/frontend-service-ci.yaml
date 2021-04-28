@@ -15,7 +15,7 @@ jobs:
       - name: 'Store GCP credentials to file'
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-        run: echo ${GOOGLE_APPLICATION_CREDENTIALS} > /github/home/sa.json
+        run: echo ${GOOGLE_APPLICATION_CREDENTIALS} >> /github/home/sa.json
       - name: 'Checkout source code'
         uses: actions/checkout@v2
       - name: 'Setup reliably CLI'
