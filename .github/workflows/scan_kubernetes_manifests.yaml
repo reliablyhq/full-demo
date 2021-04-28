@@ -3,6 +3,7 @@ name: Detect Kubernetes reliability weaknesses
 on:
   push:
     paths:
+      - '.github/workflows/scan_kubernetes_manifests.yaml'
       - 'ops/manifests/**'
 
 env:
