@@ -7,7 +7,6 @@ on:
 
 env:
   RELIABLY_TOKEN: ${{ secrets.RELIABLY_TOKEN }}
-  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
 jobs:
   reliably:
@@ -19,3 +18,5 @@ jobs:
         uses: reliablyhq/gh-action/setup@v1
       - name: 'Report on SLO coverage'
         run: reliably slo report --manifest apps/noteboard-frontend/reliably.yaml
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
