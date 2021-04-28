@@ -15,6 +15,6 @@ jobs:
       - name: 'Checkout source code'
         uses: actions/checkout@v2
       - name: 'Fetch reliably CLI'
-        uses: reliablyhq/gh-action@v1
+        uses: reliablyhq/gh-action/setup@v1
       - name: 'Report on SLO coverage'
         run: reliably slo report
