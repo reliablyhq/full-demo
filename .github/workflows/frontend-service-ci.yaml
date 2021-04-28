@@ -1,6 +1,11 @@
-name: Detect Kubernetes reliability weaknesses
+name: Run SLO reports of the Noteboard Frontend service
+on:
+  push:
+    paths:
+      - 'apps/noteboard-frontend/**'
 
-on: push
+env:
+  RELIABLY_TOKEN: ${{ secrets.RELIABLY_TOKEN }}
 
 jobs:
   reliably:
@@ -8,10 +13,6 @@ jobs:
     steps:
       - name: 'Checkout source code'
         uses: actions/checkout@v2
-      - name: Scan the operational Kubernetes manifests
+      - name: 'Scan Kubernetes manifests'
         uses: reliablyhq/gh-action@v1
-        env:
-          RELIABLY_TOKEN: ${{ secrets.RELIABLY_TOKEN }}
-        with:
-          dir: './ops/manifests'
-          format: 'sarif'
+        run: reliably slo report
