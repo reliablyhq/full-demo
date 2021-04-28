@@ -3,7 +3,7 @@ name: Detect Kubernetes reliability weaknesses
 on:
   push:
     paths:
-      - 'ops/manifests/**.yaml'
+      - 'ops/manifests/**'
 
 env:
   RELIABLY_TOKEN: ${{ secrets.RELIABLY_TOKEN }}
