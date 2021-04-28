@@ -1,6 +1,12 @@
 name: Detect Kubernetes reliability weaknesses
 
-on: push
+on:
+  push:
+    paths:
+      - 'ops/manifests/**.yaml'
+
+env:
+  RELIABLY_TOKEN: ${{ secrets.RELIABLY_TOKEN }}
 
 jobs:
   reliably:
@@ -8,10 +14,14 @@ jobs:
     steps:
       - name: 'Checkout source code'
         uses: actions/checkout@v2
-      - name: Scan the operational Kubernetes manifests
+      - name: 'Scan Kubernetes manifests'
         uses: reliablyhq/gh-action@v1
-        env:
-          RELIABLY_TOKEN: ${{ secrets.RELIABLY_TOKEN }}
+        continue-on-error: true
         with:
-          dir: './ops/manifests'
-          format: 'sarif'
+          format: "sarif"
+          output: "reliably.sarif"
+          directory: "ops/manifests"
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: reliably.sarif
