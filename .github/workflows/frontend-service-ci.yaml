@@ -17,7 +17,8 @@ jobs:
       - name: 'Setup reliably CLI'
         uses: reliablyhq/gh-action/setup@v1
       - name: 'Report on SLO coverage'
-        run: echo ${{ secrets.GCP_SA_KEY }} >> ~/sa.json && reliably slo report --manifest apps/noteboard-frontend/reliably.yaml
+        run: echo ${{ GCP_SA_KEY }} >> ~/sa.json && reliably slo report --manifest apps/noteboard-frontend/reliably.yaml
         env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           GOOGLE_APPLICATION_CREDENTIALS: ~/sa.json
         
