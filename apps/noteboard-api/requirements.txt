@@ -1,0 +1,13 @@
+fastapi
+pydantic
+starlette==0.13.6
+typer
+uvicorn<0.14.0
+databases
+python-dotenv
+asyncpg
+sqlalchemy<1.4
+ujson
+itsdangerous
+psycopg2-binary
+starlette_exporter

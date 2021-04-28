@@ -1,0 +1,17 @@
+name: Detect Kubernetes reliability weaknesses
+
+on: push
+
+jobs:
+  reliably:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout source code'
+        uses: actions/checkout@v2
+      - name: Scan the operational Kubernetes manifests
+        uses: reliablyhq/gh-action@v1
+        env:
+          RELIABLY_TOKEN: ${{ secrets.RELIABLY_TOKEN }}
+        with:
+          dir: './ops/manifests'
+          format: 'sarif'

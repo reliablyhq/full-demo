@@ -1,0 +1,19 @@
+services:
+- name: Noteboard API
+  service-levels:
+  - name: 99% availability of the Noteboard API
+    type: availability
+    slo: 99
+    sli:
+    - id: reliablydemo-d9ca726f/google-cloud-load-balancers/noteboard-api
+      provider: gcp
+    window: PT1H
+  - name: 99% latency under 100ms
+    type: latency
+    criteria:
+      threshold: 100ms
+    slo: 99
+    sli:
+    - id: reliablydemo-d9ca726f/google-cloud-load-balancers/noteboard-api
+      provider: gcp
+    window: PT1H

@@ -1,0 +1,78 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: noteboard-frontend
+  labels:
+    app: noteboard-frontend
+spec:
+  entryPoints:
+    - https
+  routes:
+  - match: PathPrefix(`/`)
+    kind: Rule
+    priority: 95
+    middlewares:
+    - name: frontendsecurityheaders
+    services:
+    - name: noteboard-frontend
+      port: 8000
+  tls:
+    secretName: ingress-tls
+    options:
+      name: tlsoptions
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: noteboard-frontend-http
+spec:
+  entryPoints:
+    - http
+  routes:
+  - match: PathPrefix(`/`)
+    kind: Rule
+    priority: 94
+    middlewares:
+    - name: httpsredirect
+    services:
+    - name: noteboard-frontend
+      port: 8000
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: noteboard-api
+  labels:
+    app: noteboard-api
+spec:
+  entryPoints:
+    - https
+  routes:
+  - match: PathPrefix(`/api/v1`)
+    kind: Rule
+    priority: 96
+    services:
+    - name: noteboard-api
+      port: 8001
+  tls:
+    secretName: ingress-tls
+    options:
+      name: tlsoptions
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: noteboard-api-http
+spec:
+  entryPoints:
+    - http
+  routes:
+  - match: PathPrefix(`/api/v1`)
+    kind: Rule
+    priority: 94
+    middlewares:
+    - name: httpsredirect
+    services:
+    - name: noteboard-api
+      port: 8001

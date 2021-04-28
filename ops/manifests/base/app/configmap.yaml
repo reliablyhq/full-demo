@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: noteboard-frontend
+data: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: noteboard-api
+data: {}

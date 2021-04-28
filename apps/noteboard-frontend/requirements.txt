@@ -1,0 +1,11 @@
+fastapi
+pydantic
+starlette==0.13.6
+typer
+uvicorn<0.14.0
+python-dotenv
+ujson
+itsdangerous
+jinja2
+httpx
+starlette_exporter

@@ -1,0 +1,97 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+    .container {
+        display: flex;
+        flex-direction: row;
+    }
+    .fill {
+        flex-grow: 4;
+    }
+    .hidden {
+        display: none;
+    }
+    </style>
+
+    <script>
+        function hideError() {
+            let error = document.getElementById("error");
+            error.className = "container hidden";
+        }
+
+        function showError(err) {
+            err.text().then((errorMessage) => {
+                let error = document.getElementById("error");
+                const newText = document.createTextNode(errorMessage);
+                error.className = "container";
+                error.querySelector('p').childNodes[0].replaceWith(newText);
+            })
+        }
+
+        function addNote() {
+            let text = document.getElementById("content").value;
+            fetch('/notes', {
+                method: 'POST',
+                body: JSON.stringify({
+                    text: text,
+                    completed: true
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                }
+            }).then((response) => {
+                if (!response.ok) { throw response; }
+                return response.json();
+            }).then((data) => {
+                hideError();
+                displayNote(text);
+            }).catch((err) => {
+                showError(err);
+            });
+        }
+
+        function displayNote(note_text) {
+            let ol = document.getElementById("notes");
+            let li = document.createElement("li");
+            li.appendChild(document.createTextNode(note_text));
+            ol.appendChild(li);
+        }
+
+        function loadNotes() {
+            fetch('/notes').then((response) => {
+                if (!response.ok) { throw response; }
+                return response.json();
+            }).then((notes) => {
+                hideError();
+                for (let note of notes) {
+                    displayNote(note.text);
+                }
+            }).catch((err) => {
+                showError(err);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", loadNotes);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="content" class="fill">
+        <button onclick="addNote()">Add Note</button>
+    </div>
+    <hr />
+    <div class="container hidden" id="error">
+        <details open class="fill">
+            <summary>Error!</summary>
+            <p>Hello</p>
+        </details>
+    </div>
+    </div>
+    <div class="container">
+        <ol id="notes"></ol>
+    <div>
+</body>
+</html>
