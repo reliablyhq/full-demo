@@ -12,11 +12,16 @@ jobs:
   reliably:
     runs-on: ubuntu-latest
     steps:
+      - name: 'Store GCP credentials to file'
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        run: echo $GOOGLE_APPLICATION_CREDENTIALS >> sa.json
       - name: 'Checkout source code'
         uses: actions/checkout@v2
-      - run: echo "GOOGLE_APPLICATION_CREDENTIALS=${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}" >> $GITHUB_ENV
       - name: 'Setup reliably CLI'
         uses: reliablyhq/gh-action/setup@v1
       - name: 'Report on SLO coverage'
         run: reliably slo report --manifest apps/noteboard-frontend/reliably.yaml
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: sa.json
         
