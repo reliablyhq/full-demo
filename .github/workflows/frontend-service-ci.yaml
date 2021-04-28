@@ -17,4 +17,4 @@ jobs:
       - name: 'Fetch reliably CLI'
         uses: reliablyhq/gh-action/setup@v1
       - name: 'Report on SLO coverage'
-        run: reliably slo report
+        run: reliably slo report --manifest apps/noteboard-frontend/reliably.yaml
