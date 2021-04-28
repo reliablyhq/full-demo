@@ -15,7 +15,7 @@ jobs:
       - name: 'Store GCP credentials to file'
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-        run: echo ${GOOGLE_APPLICATION_CREDENTIALS} >> /github/workspace/sa.json
+        run: echo ${GOOGLE_APPLICATION_CREDENTIALS} >> ~/sa.json
       - name: 'Checkout source code'
         uses: actions/checkout@v2
       - name: 'Setup reliably CLI'
@@ -23,5 +23,5 @@ jobs:
       - name: 'Report on SLO coverage'
         run: reliably slo report --manifest apps/noteboard-frontend/reliably.yaml
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: /github/workspace/sa.json
+          GOOGLE_APPLICATION_CREDENTIALS: ~/sa.json
         
