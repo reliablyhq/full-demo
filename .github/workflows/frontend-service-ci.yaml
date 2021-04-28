@@ -2,6 +2,7 @@ name: Run SLO reports of the Noteboard Frontend service
 on:
   push:
     paths:
+      - '.github/workflows/frontend-service-ci.yaml'
       - 'apps/noteboard-frontend/**'
 
 env:
