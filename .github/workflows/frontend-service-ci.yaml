@@ -25,7 +25,6 @@ jobs:
           echo "Report ended with code: $STATUS"
           if [[ $STATUS == "false" ]]; then
             gh issue create --title "Latency SLO prevents deployment" --body-file report.md
-            exit 1
           fi
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
