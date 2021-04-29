@@ -29,5 +29,6 @@ jobs:
           fi
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GOOGLE_APPLICATION_CREDENTIALS: ./sa.json
         
