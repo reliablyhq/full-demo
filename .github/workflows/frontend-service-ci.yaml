@@ -25,9 +25,16 @@ jobs:
           echo "Report ended with code: $STATUS"
           if [[ $STATUS == "false" ]]; then
             gh issue create --title "Latency SLO prevents deployment" --body-file report.md
+            wget https://github.com/rockymadden/slack-cli/archive/refs/tags/v0.18.0.tar.gz --output slack.tar.gz
+            tar zxf slack.tar.gz
+            slack-cli-0.18.0/src/slack init --token ${SLACK_BOT_TOKEN}
+            slack-cli-0.18.0/src/slack chat send hello \#general
           fi
+
+
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GOOGLE_APPLICATION_CREDENTIALS: ./sa.json
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         
