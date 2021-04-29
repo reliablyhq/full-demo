@@ -28,7 +28,7 @@ jobs:
             curl https://codeload.github.com/rockymadden/slack-cli/tar.gz/refs/tags/v0.18.0 --output slack.tar.gz
             tar zxf slack.tar.gz
             slack-cli-0.18.0/src/slack init --token ${SLACK_BOT_TOKEN}
-            slack-cli-0.18.0/src/slack chat send hello \#general
+            slack-cli-0.18.0/src/slack chat send "Frontend service is not doing well right now. You might want to be aware this may have side effects." \#general
           fi
 
 
