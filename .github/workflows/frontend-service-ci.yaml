@@ -23,7 +23,7 @@ jobs:
           echo ${GCP_SA_KEY} >> ./sa.json 
           STATUS=$(reliably slo report --manifest apps/noteboard-frontend/reliably.yaml -f json | jq -r '(.services[0].service_levels[1].actual < .services[0].service_levels[1].result.objective)')
           echo "Report ended with code: $STATUS"
-          if [[ $STATUS != "false" ]]; then
+          if [[ $STATUS == "false" ]]; then
             gh issue create --title "Latency SLO prevents deployment" --body "boom"
             exit 5
           fi
