@@ -12,6 +12,8 @@ jobs:
   reliably:
     runs-on: ubuntu-latest
     steps:
+      - name: 'Checkout source code to get the reliably manifest'
+        uses: actions/checkout@v2
       - name: 'Setup reliably CLI'
         uses: reliablyhq/gh-action/setup@v1
       - name: 'Is our SLO allowing to deploy?'
@@ -19,8 +21,10 @@ jobs:
         run: |
           echo ${GCP_SA_KEY} >> ./sa.json
           reliably slo report --manifest apps/noteboard-frontend/reliably.yaml -f json | jq -r -e '(.services[0].service_levels[1].actual < .services[0].service_levels[1].result.objective)'
-          gh issue create --title "Latency SLO prevents deployment" --body "boom"
-          exit 1
+          if [[ $? -ne 0 ]]; then
+            gh issue create --title "Latency SLO prevents deployment" --body "boom"
+            exit 1
+          fi
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           GOOGLE_APPLICATION_CREDENTIALS: ./sa.json
