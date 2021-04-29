@@ -26,7 +26,7 @@ jobs:
           STATUS=$(cat report.json | jq -r '(.services[0].service_levels[1].actual < .services[0].service_levels[1].result.objective)')
           echo "Report ended with code: $STATUS"
           if [[ $STATUS == "false" ]]; then
-            gh issue create --title "Latency SLO prevents deployment" ---body-file report.md
+            gh issue create --title "Latency SLO prevents deployment" --body-file report.md
             exit 1
           fi
         env:
