@@ -1,3 +1,4 @@
+import asyncio
 from tempfile import NamedTemporaryFile
 from typing import Any, List, Optional
 
@@ -15,6 +16,10 @@ from pydantic import AnyHttpUrl, BaseModel, BaseSettings, validator
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 import typer
 import uvicorn
+import uvloop
+
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
 ###############################################################################
@@ -77,6 +82,7 @@ app = FastAPI()
 cli = typer.Typer()
 settings = Settings()
 templates = Jinja2Templates(directory="templates")
+cache = None
 
 
 ###############################################################################

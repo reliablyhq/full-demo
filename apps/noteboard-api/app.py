@@ -1,3 +1,5 @@
+import asyncio
+import random
 import ssl
 from tempfile import NamedTemporaryFile, _TemporaryFileWrapper
 from typing import Any, Dict, Iterator, List, Optional
@@ -14,8 +16,15 @@ from sqlalchemy import Boolean, Column, Integer, String, Table, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import MetaData
 from starlette_exporter import PrometheusMiddleware, handle_metrics
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import Response
 import typer
 import uvicorn
+import uvloop
+
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
 ###############################################################################
@@ -99,7 +108,7 @@ def configure_db(app: FastAPI) -> databases.Database:
 
     db_uri = settings.SQLALCHEMY_DATABASE_URI
     options = {}
-    connect_args = None
+    connect_args = {}
     if settings.DATABASE_WITH_SSL:
         connect_args = create_connect_args()
         options["ssl"] = create_ssl_context()
@@ -112,6 +121,7 @@ def configure_db(app: FastAPI) -> databases.Database:
         # these two lines are non async but shouldn't block for long on startup
         engine = create_engine(db_uri, connect_args=connect_args)
         meta.create_all(engine)
+        engine.dispose()
 
         await database.connect()
 
@@ -194,6 +204,24 @@ class Note(BaseModel):
     completed: bool
 
 
+class SlowDownMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if request.url.path.startswith("/api/v1/notes"):
+            if with_latency > 0:
+                a = with_latency / 1000.
+                b = (with_latency + with_jitter) / 1000.
+                await asyncio.sleep(random.uniform(a, b))
+        return await call_next(request)
+
+
+class RespondWithErrorMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if request.url.path.startswith("/api/v1/notes"):
+            if with_errors:
+                return Response(status_code=random.choice(with_errors))
+        return await call_next(request)
+
+
 ###############################################################################
 # Global variables
 ###############################################################################
@@ -202,13 +230,19 @@ cli = typer.Typer()
 settings = Settings()
 Base = declarative_base()
 database: databases.Database = None
+with_latency = 0.
+with_jitter = 100.
+with_errors = None
 
 
 ###############################################################################
 # Application API
 ###############################################################################
+app.add_middleware(SlowDownMiddleware)
+app.add_middleware(RespondWithErrorMiddleware)
 app.add_middleware(PrometheusMiddleware, app_name="noteboard-frontend")
 app.add_route("/metrics", handle_metrics)
+
 
 @app.get("/api/v1/notes", response_model=List[Note])
 async def read_notes(db: databases.Database = Depends(get_db)):
@@ -221,6 +255,49 @@ async def create_note(note: NoteIn, db: databases.Database = Depends(get_db)):
     query = notes.insert().values(text=note.text, completed=note.completed)
     last_record_id = await db.execute(query)
     return {**note.dict(), "id": last_record_id}
+
+
+@app.delete("/api/v1/notes")
+async def clear_all_notes(db: databases.Database = Depends(get_db)):
+    query = notes.delete()
+    await db.execute(query)
+
+
+@app.get("/api/v1/fault")
+async def see_faults():
+    return {
+        "slowdown": {
+            "latency": with_latency,
+            "jitter": with_jitter
+        },
+        "errors": with_errors
+    }
+
+
+@app.get("/api/v1/fault/slowdown")
+async def make_slow(latency: float = 100., jitter: float = 100.):
+    global with_jitter, with_latency
+    with_latency = latency
+    with_jitter = jitter
+
+
+@app.delete("/api/v1/fault/slowdown")
+async def make_fast():
+    global with_jitter, with_latency
+    with_latency = 0.
+    with_jitter = 100.
+
+
+@app.get("/api/v1/fault/error")
+async def respond_with_error():
+    global with_errors
+    with_errors = (400, 500)
+
+
+@app.delete("/api/v1/fault/error")
+async def respond_normally():
+    global with_errors
+    with_errors = None
 
 
 ###############################################################################

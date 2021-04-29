@@ -11,3 +11,4 @@ ujson
 itsdangerous
 psycopg2-binary
 starlette_exporter
+uvloop
