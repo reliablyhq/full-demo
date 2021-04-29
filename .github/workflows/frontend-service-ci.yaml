@@ -18,9 +18,9 @@ jobs:
         run: |
           echo ${GCP_SA_KEY} >> ./sa.json
           reliably slo report --manifest apps/noteboard-frontend/reliably.yaml -f json | jq -r -e '(.services[0].service_levels[1].actual < .services[0].service_levels[1].result.objective)'
-          exitcode=$?
-          if [ $exitcode -ne 0 ]; then
+          if [[ $? -ne 0 ]]; then
             gh issue create --title "Latency SLO prevents deployment" --body "boom"
+            exit 1
           fi
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
