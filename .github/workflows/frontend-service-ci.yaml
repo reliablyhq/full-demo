@@ -12,8 +12,6 @@ jobs:
   reliably:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout source code'
-        uses: actions/checkout@v2
       - name: 'Setup reliably CLI'
         uses: reliablyhq/gh-action/setup@v1
       - name: 'Is our SLO allowing to deploy?'
