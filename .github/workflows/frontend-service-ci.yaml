@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: 'Setup reliably CLI'
         uses: reliablyhq/gh-action/setup@v1
-      - name: 'Report on SLO coverage'
+      - name: 'Is our SLO allowing to deploy?'
         run: echo ${GCP_SA_KEY} >> ./sa.json && reliably slo report --manifest apps/noteboard-frontend/reliably.yaml -f json | jq -r -e '(.services[0].service_levels[1].actual < .services[0].service_levels[1].result.objective)'
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
