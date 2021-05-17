@@ -89,9 +89,9 @@ cache = None
 # Application
 ###############################################################################
 app.add_middleware(PrometheusMiddleware, app_name="noteboard-frontend")
-app.add_route("/metrics", handle_metrics)
+app.add_route("/noteboard/metrics", handle_metrics)
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/noteboard", response_class=HTMLResponse)
 async def index(request: Request):
     async with httpx.AsyncClient() as client:
         r = await client.get(f"{settings.API_URL}/notes")
@@ -101,7 +101,7 @@ async def index(request: Request):
         "index.jinja2", {"request": request, "notes": result})
 
 
-@app.get("/notes", response_model=List[Note])
+@app.get("/noteboard/notes", response_model=List[Note])
 async def get_notes():
     async with httpx.AsyncClient() as client:
         r = await client.get(f"{settings.API_URL}/notes")
@@ -109,7 +109,7 @@ async def get_notes():
         return result
 
 
-@app.post("/notes", response_model=Note)
+@app.post("/noteboard/notes", response_model=Note)
 async def create_note(note: NoteIn):
     async with httpx.AsyncClient() as client:
         r = await client.post(f"{settings.API_URL}/notes", json=note.dict())

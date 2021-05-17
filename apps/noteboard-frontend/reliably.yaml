@@ -5,7 +5,7 @@ services:
     type: availability
     slo: 99
     sli:
-    - id: reliablydemo-d9ca726f/google-cloud-load-balancers/hello-service-url-map
+    - id: reliablydemo-523c3611/google-cloud-load-balancers/demo-lb
       provider: gcp
     window: PT1H
   - name: 99% latency under 200ms
@@ -14,6 +14,6 @@ services:
       threshold: 200ms
     slo: 99
     sli:
-    - id: reliablydemo-d9ca726f/google-cloud-load-balancers/hello-service-url-map
+    - id: reliablydemo-523c3611/google-cloud-load-balancers/demo-lb
       provider: gcp
     window: PT1H

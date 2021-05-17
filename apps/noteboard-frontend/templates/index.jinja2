@@ -33,7 +33,7 @@
 
         function addNote() {
             let text = document.getElementById("content").value;
-            fetch('/notes', {
+            fetch('/noteboard/notes', {
                 method: 'POST',
                 body: JSON.stringify({
                     text: text,
@@ -61,7 +61,7 @@
         }
 
         function loadNotes() {
-            fetch('/notes').then((response) => {
+            fetch('/noteboard/notes').then((response) => {
                 if (!response.ok) { throw response; }
                 return response.json();
             }).then((notes) => {

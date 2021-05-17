@@ -241,16 +241,16 @@ with_errors = None
 app.add_middleware(SlowDownMiddleware)
 app.add_middleware(RespondWithErrorMiddleware)
 app.add_middleware(PrometheusMiddleware, app_name="noteboard-frontend")
-app.add_route("/metrics", handle_metrics)
+app.add_route("/noteboard/api/v1/metrics", handle_metrics)
 
 
-@app.get("/api/v1/notes", response_model=List[Note])
+@app.get("/noteboard/api/v1/notes", response_model=List[Note])
 async def read_notes(db: databases.Database = Depends(get_db)):
     query = notes.select()
     return await db.fetch_all(query)
 
 
-@app.post("/api/v1/notes", response_model=Note)
+@app.post("/noteboard/api/v1/notes", response_model=Note)
 async def create_note(note: NoteIn, db: databases.Database = Depends(get_db)):
     query = notes.insert().values(text=note.text, completed=note.completed)
     last_record_id = await db.execute(query)
@@ -263,7 +263,7 @@ async def clear_all_notes(db: databases.Database = Depends(get_db)):
     await db.execute(query)
 
 
-@app.get("/api/v1/fault")
+@app.get("/noteboard/api/v1/fault")
 async def see_faults():
     return {
         "slowdown": {
@@ -274,27 +274,27 @@ async def see_faults():
     }
 
 
-@app.get("/api/v1/fault/slowdown")
+@app.get("/noteboard/api/v1/fault/slowdown")
 async def make_slow(latency: float = 100., jitter: float = 100.):
     global with_jitter, with_latency
     with_latency = latency
     with_jitter = jitter
 
 
-@app.delete("/api/v1/fault/slowdown")
+@app.delete("/noteboard/api/v1/fault/slowdown")
 async def make_fast():
     global with_jitter, with_latency
     with_latency = 0.
     with_jitter = 100.
 
 
-@app.get("/api/v1/fault/error")
+@app.get("/noteboard/api/v1/fault/error")
 async def respond_with_error():
     global with_errors
     with_errors = (400, 500)
 
 
-@app.delete("/api/v1/fault/error")
+@app.delete("/noteboard/api/v1/fault/error")
 async def respond_normally():
     global with_errors
     with_errors = None
