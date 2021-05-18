@@ -114,3 +114,8 @@ $ reliably slo report --manifest apps/noteboard-api/reliably.yaml
 Remember that we cannot compute reports under a minute of interval. If you 
 call the command twice in less than a minute, you'll get more or less the
 same reports.
+
+Finally, you can remove all existing notes as follows:
+```console
+$ curl -X DELETE https://demo.reliably.com/noteboard/api/v1/notes
+```

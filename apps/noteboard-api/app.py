@@ -257,7 +257,7 @@ async def create_note(note: NoteIn, db: databases.Database = Depends(get_db)):
     return {**note.dict(), "id": last_record_id}
 
 
-@app.delete("/api/v1/notes")
+@app.delete("/noteboard/api/v1/notes")
 async def clear_all_notes(db: databases.Database = Depends(get_db)):
     query = notes.delete()
     await db.execute(query)
