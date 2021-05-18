@@ -3,10 +3,10 @@
 ## What does this repository contain?
 
 * [x] A terraform set of resources to create a GCP infrastructure
-* [-] A set of Kubernetes manifests to run applications in a Kubernetes environment
+* [ ] A set of Kubernetes manifests to run applications in a Kubernetes environment
 * [x] A dummy application
 * [x] A set of reliably manifests per application services
-* [] Chaos Toolkit experiments
+* [ ] Chaos Toolkit experiments
 
 ## What should you use?
 
