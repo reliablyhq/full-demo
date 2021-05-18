@@ -10,3 +10,4 @@ jinja2
 httpx
 starlette_exporter
 uvloop
+Secweb

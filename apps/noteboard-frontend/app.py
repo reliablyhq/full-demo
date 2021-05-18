@@ -13,6 +13,8 @@ except ImportError:
     pass
 import httpx
 from pydantic import AnyHttpUrl, BaseModel, BaseSettings, validator
+from Secweb import SecWeb
+from Secweb.ContentSecurityPolicy import Nonce_Processor
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 import typer
 import uvicorn
@@ -83,6 +85,9 @@ cli = typer.Typer()
 settings = Settings()
 templates = Jinja2Templates(directory="templates")
 cache = None
+SecWeb(
+    app=app, Option={'hsts': {'max-age': 2592000}}, script_nonce=True,
+    style_nonce=True)
 
 
 ###############################################################################
@@ -93,12 +98,14 @@ app.add_route("/noteboard/metrics", handle_metrics)
 
 @app.get("/noteboard", response_class=HTMLResponse)
 async def index(request: Request):
+    nonce = Nonce_Processor(DEFAULT_ENTROPY=20)
+
     async with httpx.AsyncClient() as client:
         r = await client.get(f"{settings.API_URL}/notes")
         result = r.json()
 
     return templates.TemplateResponse(
-        "index.jinja2", {"request": request, "notes": result})
+        "index.jinja2", {"request": request, "notes": result, "nonce": nonce})
 
 
 @app.get("/noteboard/notes", response_model=List[Note])
