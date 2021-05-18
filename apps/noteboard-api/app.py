@@ -206,17 +206,17 @@ class Note(BaseModel):
 
 class SlowDownMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        if request.url.path.startswith("/api/v1/notes"):
+        if request.url.path.startswith("/noteboard/api/v1/notes"):
             if with_latency > 0:
                 a = with_latency / 1000.
-                b = (with_latency + with_jitter) / 1000.
+                b = (with_latency + random.randint(0, with_jitter)) / 1000.
                 await asyncio.sleep(random.uniform(a, b))
         return await call_next(request)
 
 
 class RespondWithErrorMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        if request.url.path.startswith("/api/v1/notes"):
+        if request.url.path.startswith("/noteboard/api/v1/notes"):
             if with_errors:
                 return Response(status_code=random.choice(with_errors))
         return await call_next(request)
