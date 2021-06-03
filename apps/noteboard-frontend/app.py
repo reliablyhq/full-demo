@@ -86,8 +86,22 @@ settings = Settings()
 templates = Jinja2Templates(directory="templates")
 cache = None
 SecWeb(
-    app=app, Option={'hsts': {'max-age': 2592000}}, script_nonce=True,
-    style_nonce=True)
+    app=app, Option={
+        'hsts': {'max-age': 2592000},
+        'csp': {
+            'default-src': ["'self'"],
+            'base-uri': ["'self'"],
+            'block-all-mixed-content': [],
+            'font-src': ["'self'", 'https:', 'data:'],
+            'frame-ancestors': ["'self'"],
+            'img-src': ["'self'", 'data:'],
+            "object-src": ["'none'"],
+            "script-src": ["'self'"],
+            "script-src-attr": ["'none'"],
+            "style-src": ["'self'", "https:", "'unsafe-inline'"],
+            "upgrade-insecure-requests": [],
+            "require-trusted-types-for": ["'script'"]
+        }}, script_nonce=True, style_nonce=True)
 
 
 ###############################################################################

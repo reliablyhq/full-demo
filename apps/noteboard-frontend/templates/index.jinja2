@@ -74,13 +74,18 @@
             });
         }
 
-        document.addEventListener("DOMContentLoaded", loadNotes);
+        function initialize() {
+            document.getElementById("send").addEventListener("click", addNote);
+            loadNotes()
+        }
+
+        document.addEventListener("DOMContentLoaded", initialize);
     </script>
 </head>
 <body>
     <div class="container">
         <input type="text" id="content" class="fill">
-        <button onclick="addNote()">Add Note</button>
+        <button id="send">Add Note</button>
     </div>
     <hr />
     <div class="container hidden" id="error">
