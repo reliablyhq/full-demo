@@ -826,7 +826,7 @@ resource "google_compute_url_map" "default" {
 resource "google_compute_backend_service" "hello" {
   project    = google_project.project.project_id
   name       = "hello"
-  enable_cdn = false
+  enable_cdn = true
 
   backend {
     group = google_compute_region_network_endpoint_group.hello.id
@@ -836,7 +836,7 @@ resource "google_compute_backend_service" "hello" {
 resource "google_compute_backend_service" "noteboard-frontend" {
   project    = google_project.project.project_id
   name       = "noteboard-frontend"
-  enable_cdn = false
+  enable_cdn = true
 
   backend {
     group = google_compute_region_network_endpoint_group.noteboard-frontend.id
@@ -860,6 +860,7 @@ resource "google_compute_target_https_proxy" "demo" {
   name             = "demo"
   url_map          = google_compute_url_map.default.id
   ssl_certificates = [google_compute_managed_ssl_certificate.default.id]
+  ssl_policy       = google_compute_ssl_policy.ssl-policy.id
 }
 
 
@@ -874,6 +875,12 @@ resource "google_compute_global_forwarding_rule" "demo" {
   load_balancing_scheme = "EXTERNAL"
   port_range            = "443"
   target                = google_compute_target_https_proxy.demo.id
+}
+
+resource "google_compute_ssl_policy" "ssl-policy" {
+  project = google_project.project.project_id
+  name    = "ssl-policy"
+  profile = "MODERN"
 }
 
 ################################################################################
