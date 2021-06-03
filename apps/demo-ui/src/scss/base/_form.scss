@@ -1,0 +1,40 @@
+form {
+  .input-wrapper {
+
+    + .input-wrapper {
+      margin-top: 1em;
+    }
+
+    label {
+      display: block;
+
+    }
+
+    input,
+    textarea {
+      display: block;
+      height: 3.6rem;
+      width: 100%;
+      max-width: 40rem;
+      padding: .5em;
+
+      background-color: var(--blue-700);
+      border: none;
+      border-radius: .5rem;
+
+      color: var(--text-color-dark);
+
+      &:focus {
+        outline: 2px solid var(--yellow-500);
+      }
+    }
+
+    textarea {
+      min-height: 6em;
+    }
+  }
+
+  .mandatory {
+    color: var(--red-400);
+  }
+}

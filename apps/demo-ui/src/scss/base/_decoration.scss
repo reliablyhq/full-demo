@@ -1,0 +1,17 @@
+.decoration-ribbon {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+
+    &--yellow {
+      background-image: url("/backgrounds/svg/yellow-ribbon.svg");
+    }
+
+    &--blue {
+      background-image: url("/backgrounds/svg/blue-ribbon.svg");
+    }
+
+    &--red {
+      background-image: url("/backgrounds/svg/red-ribbon.svg");
+    }
+}

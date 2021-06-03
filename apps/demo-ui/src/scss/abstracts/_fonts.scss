@@ -1,0 +1,18 @@
+@font-face {
+  font-display: swap;
+  font-family: 'Agrandir';
+  src: local(''),
+       url('../assets/fonts/Agrandir-GrandHeavy-f20007.woff2') format('woff2'),
+       url('../assets/fonts/Agrandir-GrandHeavy-923046.woff') format('woff');
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Filson Pro';
+  src: local(''),
+       url('../assets/fonts/FilsonPro-Bold-759790.woff2') format('woff2'),
+       url('../assets/fonts/FilsonPro-Bold-ce7d2c.woff') format('woff');
+  font-weight: 700;
+}

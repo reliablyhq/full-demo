@@ -1,0 +1,19 @@
+.brand-stripes {
+  position: relative;
+
+  padding-top: 12rem;
+
+  &::before {
+    content: '';
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: block;
+    height: 12rem;
+    width: 100%;
+
+    background: linear-gradient(180deg, var(--yellow-500), var(--yellow-500) 19%, var(--red-500) 19%, var(--red-500) 52%, var(--yellow-800) 52%, var(--yellow-800));
+  }
+}

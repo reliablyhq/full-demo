@@ -1,0 +1,40 @@
+.dark {
+  background-color: var(--blue-800);
+
+  color: var(--text-color-dark);
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--heading-color-dark);
+  }
+
+  .title-with-sup {
+    strong {
+      color: var(--heading-color-dark);
+    }
+  }
+}
+
+.grey {
+  background-color: var(--grey-100);
+
+  color: var(--text-color-grey);
+
+  .title-with-sup {
+    strong {
+      color: var(--heading-color);
+    }
+  }
+}
+
+.light-blue {
+    background-color: var(--grey-100);
+  
+    color: var(--text-color-grey);
+  
+    .title-with-sup {
+      strong {
+        color: var(--heading-color);
+      }
+    }
+  }
+  
