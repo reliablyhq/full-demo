@@ -20,8 +20,6 @@ jobs:
         run: |
           echo ${GCP_SA_KEY} >> ./sa.json
           reliably slo report -v --manifest apps/noteboard-frontend/reliably.yaml -f json,markdown -o report.json,report.md
-          cat report.json
-          cat report.json | jq -r '.services[0].service_levels[1].result.slo_is_met'
           STATUS=$(cat report.json | jq -r '.services[0].service_levels[1].result.slo_is_met')
           echo "Report ended with code: $STATUS"
           if [[ $STATUS == "false" ]]; then
@@ -31,7 +29,6 @@ jobs:
             slack-cli-0.18.0/src/slack init --token ${SLACK_BOT_TOKEN}
             slack-cli-0.18.0/src/slack chat send "Frontend service is not doing well right now. You might want to be aware this may have side effects." \#general
           fi
-
 
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
