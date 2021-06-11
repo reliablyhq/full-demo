@@ -39,4 +39,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GOOGLE_APPLICATION_CREDENTIALS: ./sa.json
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        
+          RELIABLY_TOKEN: ${{ secrets.RELIABLY_TOKEN }}
