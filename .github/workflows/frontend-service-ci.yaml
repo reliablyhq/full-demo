@@ -19,6 +19,7 @@ jobs:
       - name: 'Is our SLO allowing to deploy?'
         run: |
           echo ${GCP_SA_KEY} >> ./sa.json
+          reliably slo report --manifest apps/noteboard-frontend/reliably.yaml -f json
           reliably slo report --manifest apps/noteboard-frontend/reliably.yaml -f json,markdown -o report.json,report.md
           cat report.json
           cat report.json | jq -r '.services[0].service_levels[1].result.slo_is_met'
